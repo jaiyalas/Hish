@@ -1,7 +1,7 @@
 # Hish
 
 [![Build Status](https://api.travis-ci.org/jaiyalas/Hish.png?branch=stable)](http://travis-ci.org/jaiyalas/Hish)
-[![MIT](http://b.repl.ca/v1/license-MIT-blue.png)](https://en.wikipedia.org/wiki/MIT_License)
+[![MIT](http://b.repl.ca/v1/license-BSD3-blue.png)](https://en.wikipedia.org/wiki/BSD_licenses)
 [![Haskell](http://b.repl.ca/v1/language-haskell-orange.png)](http://haskell.org)
 
 Prompt program for Fish shell written in Haskell

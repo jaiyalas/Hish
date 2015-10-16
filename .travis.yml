@@ -26,7 +26,6 @@ install:
   - cabal install --only-dependencies
 
 script:
-  - autoreconf
   - cabal configure -v2
   - cabal build
 

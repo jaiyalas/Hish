@@ -6,15 +6,9 @@
 
 Prompt program for Fish shell written in Haskell
 
-## Install
-
-```
-> cabal configure
-> cabal build
-> cabal install
-```
-
 ## Features
+
+### Done
 
 + show **git status**
   + "#" for *clean*
@@ -23,7 +17,7 @@ Prompt program for Fish shell written in Haskell
 + show **working directory**
   + be shortened if too long
 
-## Todo
+### Todo
 
 + [ ] distinguish the cases of *clean* and *up-to-date*
 + [ ] show *time*
@@ -31,3 +25,9 @@ Prompt program for Fish shell written in Haskell
 + [ ] show *SSH* info
 + [ ] use *config file*
 + [ ] load *environment variables*
+
+## Installation
+
+```
+> cabal install Hish
+```

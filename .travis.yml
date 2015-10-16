@@ -29,7 +29,7 @@ install:
 script:
   - cabal configure -v2
   - cabal build
-  - cabal check
+  # - cabal check
   - cabal sdist
   - export SRC_TGZ=$(cabal info . | awk '{print $2 ".tar.gz";exit}') ;
     cd dist/;

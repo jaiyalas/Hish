@@ -10,7 +10,7 @@ Homepage:               https://github.com/jaiyalas/Hish
 Bug-reports:            https://github.com/jaiyalas/Hish/issues
 Cabal-Version:          >= 1.12
 Build-Type:             Simple
-Extra-Source-Files:     README.md, ChangeLog.md
+Extra-Source-Files:     README.md, ChangeLog.md, hackage-docs.sh
 category:               Command Line, Console, Shell
 --
 

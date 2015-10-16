@@ -14,8 +14,6 @@ Prompt program for Fish shell written in Haskell
 > cabal install
 ```
 
-
-
 ## Features
 
 + show **git status**
@@ -27,6 +25,7 @@ Prompt program for Fish shell written in Haskell
 
 ## Todo
 
++ [ ] distinguish the cases of *clean* and *up-to-date*
 + [ ] show *time*
 + [ ] implement *color theme*
 + [ ] show *SSH* info

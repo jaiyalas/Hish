@@ -1,18 +1,42 @@
-name:               Hish
-version:            0.1
-description:        Prompt program for Fish shell written in Haskell
-author:             Yun-Yan Chi
-maintainer:    	    jaiyalas@gmail.com
-homepage:           https://github.com/jaiyalas/Hish
-license:            BSD3
-build-type:         Simple
-cabal-version:      >= 1.12
+Name:                   Hish
+Version:                0.0.1
+Author:                 Yun-Yan Chi
+Maintainer:             jaiyalas@gmail.com
+License:                BSD3
+License-File:           LICENSE
+-- Synopsis:
+Description:            Prompt program for Fish shell written in Haskell
+Homepage:               https://github.com/jaiyalas/Hish
+Bug-reports:            https://github.com/jaiyalas/Hish/issues
+Cabal-Version:          >= 1.12
+Build-Type:             Simple
+Extra-Source-Files:     README.md, ChangeLog.md
+category:               Command Line, Console, Shell
+--
 
+library
+  buildable: True
+  exposed:   True
+  default-language: Haskell2010
+  hs-source-dirs: src
+  ghc-options: -w
+  build-depends: base      >= 4 && < 5
+               , MissingH  >= 1.2
+               , process   >= 1.2
+  exposed-modules:
+        Hish.ANSICode
+        Hish.SysInfo
+
+--
 executable hish
   default-language: Haskell2010
   hs-source-dirs:   src
-  main-is:          Hish.hs
-  ghc-options:      -O2
-  build-depends: base      >= 4
+  main-is:          hish.hs
+  ghc-options:      -w
+  build-depends: base      >= 4 && < 5
                , MissingH  >= 1.2
                , process   >= 1.2
+--
+Source-Repository head
+  Type:                 git
+  location:             https://github.com/jaiyalas/Hish.git

@@ -1,4 +1,4 @@
-module ANSICode
+module Hish.ANSICode
   ( ANSICode (..)
   , esc
   , (<>)
@@ -41,14 +41,19 @@ module ANSICode
   , bgWhiteL
   ) where
 
+-- | Encoding ANSI-code
 data ANSICode = ESC_Bold
               | ESC_Underline
               | ESC_Reverse
               | ESC_Reset
               | ESC_Fg        {fg :: Int}
               | ESC_Bg        {bg :: Int}
-              | ESC_Setup     {body :: (Int,Int,Int)}
+              | ESC_Setup
+                { -- | (foreground, background, other) 
+                body :: (Int,Int,Int)
+                }
               deriving Show
+
 
 instance Monoid ANSICode where
   mempty  = ESC_Setup (0,0,0)
@@ -59,15 +64,19 @@ instance Monoid ANSICode where
   mappend (ESC_Fg   fc) (ESC_Setup (f,b,i)) = ESC_Setup (fc,b,0)
   mappend (ESC_Bg   bc) (ESC_Setup (f,b,i)) = ESC_Setup (f,bc,0)
 
-
+-- | alias of mempty
 esc :: ANSICode
 esc = mempty
 
+-- | alias of mappend
 (<>) :: ANSICode -> ANSICode -> ANSICode
 x <> y = mappend x y
 infixr 6 <>
 
-applyANSI :: String -> ANSICode -> String
+-- | apply ANSI setting onto a given string
+applyANSI :: String   -- ^ content
+          -> ANSICode -- ^ ANSI setting
+          -> String
 applyANSI s (ESC_Setup (f,b,i)) | f == 0, b == 0, i == 0 = "\ESC[0m\STX"++s
                             | f == 0, b == 0, i == 1 = "\ESC[1m\STX"++s++"\ESC[0m\STX"
                             | f == 0, b == 0, i == 4 = "\ESC[4m\STX"++s++"\ESC[0m\STX"
@@ -88,14 +97,14 @@ fgMagenta = ESC_Fg 35
 fgCyan    = ESC_Fg 36
 fgWhite   = ESC_Fg 37
 
-fgBlackL   = ESC_Fg 90 -- Dark gray
-fgRedL     = ESC_Fg 91 -- Light red
-fgGreenL   = ESC_Fg 92 -- Light green
-fgYellowL  = ESC_Fg 93 -- Light yellow
-fgBlueL    = ESC_Fg 94 -- Light blue
-fgMagentaL = ESC_Fg 95 -- Light magenta
-fgCyanL    = ESC_Fg 96 -- Light cyan
-fgWhiteL   = ESC_Fg 97 -- White
+fgBlackL   = ESC_Fg 90
+fgRedL     = ESC_Fg 91
+fgGreenL   = ESC_Fg 92
+fgYellowL  = ESC_Fg 93
+fgBlueL    = ESC_Fg 94
+fgMagentaL = ESC_Fg 95
+fgCyanL    = ESC_Fg 96
+fgWhiteL   = ESC_Fg 97
 
 bgBlack   = ESC_Bg 40
 bgRed     = ESC_Bg 41
@@ -106,11 +115,11 @@ bgMagenta = ESC_Bg 45
 bgCyan    = ESC_Bg 46
 bgWhite   = ESC_Bg 47
 
-bgBlackL   = ESC_Bg 100 -- Dark gray
-bgRedL     = ESC_Bg 101 -- Light red
-bgGreenL   = ESC_Bg 102 -- Light green
-bgYellowL  = ESC_Bg 103 -- Light yellow
-bgBlueL    = ESC_Bg 104 -- Light blue
-bgMagentaL = ESC_Bg 105 -- Light magenta
-bgCyanL    = ESC_Bg 106 -- Light cyan
-bgWhiteL   = ESC_Bg 107 -- White
+bgBlackL   = ESC_Bg 100
+bgRedL     = ESC_Bg 101
+bgGreenL   = ESC_Bg 102
+bgYellowL  = ESC_Bg 103
+bgBlueL    = ESC_Bg 104
+bgMagentaL = ESC_Bg 105
+bgCyanL    = ESC_Bg 106
+bgWhiteL   = ESC_Bg 107

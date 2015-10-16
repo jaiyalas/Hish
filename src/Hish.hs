@@ -17,16 +17,20 @@ main = do
   st <- status
   br <- branch
   wd <- pwd
+  -- show GIT BRANCH
   putStr $ applyANSI wd $ fgGreen <> esc
-  putStr " "
-  putStr $ applyANSI br $ fgBlueL <> esc
-  --putStr " "
+  case br of
+    "" -> putStr ""
+    _  -> do
+      putStr " "
+      putStr $ applyANSI br $ fgBlueL <> esc
+  -- show GIT STATUS
   case st of
     "*" -> putStr $ applyANSI st $ ESC_Bold <> fgRedL <> esc
     "#" -> putStr $ applyANSI st $ ESC_Bold <> fgGreen <> esc
+    _   -> putStr ""
+  -- show PROMPT SYMBOL
   putStr $ applyANSI (_prompt_symbol++" ") $ fgWhiteL <> esc
-
-
 --
 status :: IO String
 status = do

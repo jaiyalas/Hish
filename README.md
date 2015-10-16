@@ -8,9 +8,11 @@ Prompt program for Fish shell written in Haskell
 
 ## Install 
 
+```
 > cabal configure
 > cabal build
 > cabal install
+```
 
 ## Features
 

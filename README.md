@@ -6,7 +6,7 @@
 
 Prompt program for Fish shell written in Haskell
 
-## Install 
+## Install
 
 ```
 > cabal configure
@@ -14,17 +14,21 @@ Prompt program for Fish shell written in Haskell
 > cabal install
 ```
 
+
+
 ## Features
 
-+ show local **time**
-+ show **git status** 
++ show **git status**
   + "#" for *clean*
   + "\*" for *dirty*
-+ show **git branch** 
++ show **git branch**
 + show **working directory**
   + be shortened if too long
 
 ## Todo
 
-+ [ ] Color theme
-+ [ ] SSH info
++ [ ] show *time*
++ [ ] implement *color theme*
++ [ ] show *SSH* info
++ [ ] use *config file*
++ [ ] load *environment variables*

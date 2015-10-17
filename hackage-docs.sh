@@ -30,7 +30,8 @@ fi
 echo "Detected package: $pkg-$ver"
 
 dir=$(mktemp -d build-docs.XXXXXX)
-trap 'rm -r "$dir"' EXIT
+
+trap 'rm -Rf "$dir"' EXIT
 
 cabal haddock --hoogle --hyperlink-source --html-location='/package/$pkg-$version/docs' --contents-location='/package/$pkg-$version'
 

@@ -2,6 +2,7 @@ module Main where
 
 import Hish.ANSICode
 import Hish.SysInfo
+import Hish.GitInfo
 
 --
 _prompt_symbol = ">"
@@ -9,7 +10,7 @@ _pwdWidth = 60
 
 main :: IO ()
 main = do
-  st <- status
+  st <- gitStatus
   br <- branch
   wd <- pwd _pwdWidth
   -- show GIT BRANCH

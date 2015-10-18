@@ -1,10 +1,9 @@
-module Hish.SysInfo
-  {-# DEPRECATED "Use Hish.GitInfo instead" #-}
+module Hish.GitInfo
   ( status
   , branch
   , pwd
   , uid
-  )where
+  ) where
 
 import System.Process
 import System.Exit

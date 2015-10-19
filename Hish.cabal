@@ -1,11 +1,11 @@
 Name:                   Hish
-Version:                0.0.1
+Version:                0.1.0
 Author:                 Yun-Yan Chi
 Maintainer:             jaiyalas@gmail.com
 License:                BSD3
 License-File:           LICENSE
 -- Synopsis:
-Description:            Generating a beautiful and useful prompt. 
+Description:            Generating a beautiful and useful prompt.
 Homepage:               https://github.com/jaiyalas/Hish
 Bug-reports:            https://github.com/jaiyalas/Hish/issues
 Cabal-Version:          >= 1.12

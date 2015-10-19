@@ -5,7 +5,7 @@ Maintainer:             jaiyalas@gmail.com
 License:                BSD3
 License-File:           LICENSE
 -- Synopsis:
-Description:            Prompt program for Fish shell written in Haskell
+Description:            Generating a beautiful and useful prompt. 
 Homepage:               https://github.com/jaiyalas/Hish
 Bug-reports:            https://github.com/jaiyalas/Hish/issues
 Cabal-Version:          >= 1.12

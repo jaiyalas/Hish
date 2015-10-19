@@ -1,9 +1,10 @@
 module Hish.ANSICode
-  ( ANSICode (..)
-  , esc
-  , (<>)
+  (
+  -- * The ANSICode
+    ANSICode (..)
+  -- ** Utilities
   , applyANSI
-  --
+  -- ** Preset colors
   , fgBlack
   , fgRed
   , fgGreen
@@ -41,19 +42,23 @@ module Hish.ANSICode
   , bgWhiteL
   ) where
 
+import Data.Monoid (mempty,(<>))
+
 -- | Encoding ANSI-code
 data ANSICode = ESC_Bold
               | ESC_Underline
               | ESC_Reverse
               | ESC_Reset
-              | ESC_Fg        {fg :: Int}
-              | ESC_Bg        {bg :: Int}
+              | ESC_Fg
+                  { -- | foreground color
+                  fg :: Int}
+              | ESC_Bg
+                  { -- | background color
+                  bg :: Int}
               | ESC_Setup
-                { -- | (foreground, background, other) 
-                body :: (Int,Int,Int)
-                }
-              deriving Show
-
+                  { -- | (foreground, background, other)
+                  body :: (Int,Int,Int)}
+              deriving (Show,Eq)
 
 instance Monoid ANSICode where
   mempty  = ESC_Setup (0,0,0)
@@ -64,25 +69,22 @@ instance Monoid ANSICode where
   mappend (ESC_Fg   fc) (ESC_Setup (f,b,i)) = ESC_Setup (fc,b,0)
   mappend (ESC_Bg   bc) (ESC_Setup (f,b,i)) = ESC_Setup (f,bc,0)
 
--- | alias of mempty
-esc :: ANSICode
-esc = mempty
-
--- | alias of mappend
-(<>) :: ANSICode -> ANSICode -> ANSICode
-x <> y = mappend x y
-infixr 6 <>
-
--- | apply ANSI setting onto a given string
-applyANSI :: String   -- ^ content
+-- | apply ANSI setting onto the given string.
+-- For example,
+--
+-- >>> applyANSI "haskell" (fgCyanL <> ESC_Bold <> mempty)
+-- "\ESC[96;1m\STXhaskell\ESC[0m\STX"
+--
+applyANSI :: String   -- ^ input string
           -> ANSICode -- ^ ANSI setting
           -> String
-applyANSI s (ESC_Setup (f,b,i)) | f == 0, b == 0, i == 0 = "\ESC[0m\STX"++s
-                            | f == 0, b == 0, i == 1 = "\ESC[1m\STX"++s++"\ESC[0m\STX"
-                            | f == 0, b == 0, i == 4 = "\ESC[4m\STX"++s++"\ESC[0m\STX"
-                            | i == 0 = "\ESC["++(showC f)++(showC b)++"m\STX"++s++"\ESC[0m\STX"
-                            | i == 1 = "\ESC["++(showC f)++(showC b)++"1m\STX"++s++"\ESC[0m\STX"
-                            | i == 4 = "\ESC["++(showC f)++(showC b)++"4m\STX"++s++"\ESC[0m\STX"
+applyANSI s (ESC_Setup (f,b,i))
+   | f == 0, b == 0, i == 0 = "\ESC[0m\STX"++s
+   | f == 0, b == 0, i == 1 = "\ESC[1m\STX"++s++"\ESC[0m\STX"
+   | f == 0, b == 0, i == 4 = "\ESC[4m\STX"++s++"\ESC[0m\STX"
+   | i == 0 = "\ESC["++(showC f)++(showC b)++"m\STX"++s++"\ESC[0m\STX"
+   | i == 1 = "\ESC["++(showC f)++(showC b)++"1m\STX"++s++"\ESC[0m\STX"
+   | i == 4 = "\ESC["++(showC f)++(showC b)++"4m\STX"++s++"\ESC[0m\STX"
 
 showC :: Int -> String
 showC 0 = ""

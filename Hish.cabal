@@ -27,6 +27,7 @@ library
   exposed-modules:
         Hish.ANSICode
         Hish.SysInfo
+        Hish.VCS
 
 --
 executable hish

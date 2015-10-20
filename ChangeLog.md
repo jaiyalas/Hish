@@ -27,4 +27,10 @@
 ## 0.1.2.0  -- 2015-10-20
 
 * [m] implement supporting of darcs
-* [+] check executability of vcs 
+* [+] check executability of vcs
+
+## 0.1.2.1  -- 2015-10-21
+
+* [m] re-design status symbol
+* [m] reset prompt format and color
+* [-] turn-off the supporting of darcs

@@ -6,14 +6,6 @@ import qualified Hish.VCS as VCS
 -- for manipulating ANSI code
 import Data.Monoid (mempty,(<>))
 
-{- +++++++++++++++++++++++++++++++
--- Is this helpful?
-import System.Environment (getEnv    -- String -> IO String
-                          ,setEnv    -- String -> String -> IO ()
-                          ,lookupEnv -- String -> IO (Maybe String)
-                          )
-+++++++++++++++++++++++++++++++ -}
-
 _prompt_symbol = ">"
 _pwdWidth = 60
 
@@ -25,7 +17,7 @@ main = do
    putStr " "
    --
    safePrintVCS VCS.Git
-   safePrintVCS VCS.Darcs
+   -- safePrintVCS VCS.Darcs
    --
    putStr $ applyANSI (_prompt_symbol++" ") $ mempty
 

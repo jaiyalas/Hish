@@ -1,5 +1,3 @@
-{-# OverloadedStrings #-}
-
 module Main where
 
 import Hish.ANSICode

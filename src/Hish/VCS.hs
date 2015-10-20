@@ -67,3 +67,4 @@ instance VCS Darcs where
    vcsAhead _ s = return "a"
    vcsBehind _ s = return "b"
    vcsCleanliness _ s = return "?"
+   vcsCurrentBranch _ s = return "QQ"

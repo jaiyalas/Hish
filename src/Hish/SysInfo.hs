@@ -1,3 +1,5 @@
+{-# OverloadedStrings #-}
+
 module Hish.SysInfo
   (
   -- * Get basic information

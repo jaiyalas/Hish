@@ -1,3 +1,5 @@
+{-# OverloadedStrings #-}
+
 module Hish.ANSICode
   (
   -- * The ANSICode

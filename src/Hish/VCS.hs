@@ -1,3 +1,5 @@
+{-# OverloadedStrings #-}
+
 module Hish.VCS
    (
    -- * Version Control System

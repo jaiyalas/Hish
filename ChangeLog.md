@@ -23,3 +23,8 @@
 * [+] show local time
 * [+] support darcs (incompolete)
 * [m] wrap/extract printing-functions from main
+
+## 0.1.2.0  -- 2015-10-20
+
+* [m] implement supporting of darcs
+* [+] check executability of vcs 

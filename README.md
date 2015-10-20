@@ -10,25 +10,26 @@ Generating a beautiful and useful prompt.
 
 ### Done
 
++ [X] Basic ANSI color
 + [X] show **local time**
 + [X] show **user name**
 + [X] show **host name**
 + [X] show **working directory**
   + will be shortened if too long
++ [X] support version control system
+   + git (fully supported)
+   + darcs (darcs has no branch; tracking status is not supported)
 + [X] show **branch name (git only)**
-+ [X] show **index/tree status (git only)**
++ [X] show **index/tree status (git and darcs)**
   + *\** - dirty
   + *?* - clean *but still having untracked files*
   + *#* - clean
 + [X] show **tracking status (git only)**
   + *+n* - branch is *ahead* by n
   + *-n* - branch is *behind* by n
-+ [X] Basic ANSI color
-+ [X] support *darcs* (but not implement correctly)
 
 ### Todo
 
-+ [ ] complete darcs supporting
 + [ ] implement *color theme*
 + [ ] show *SSH* info
 + [ ] use *config file*

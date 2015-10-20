@@ -85,9 +85,14 @@ instance Show Darcs where
    show Darcs = "D"
 
 instance VCS Darcs where
-   vcsAhead _ s = return "a"
-   vcsBehind _ s = return "b"
-   vcsCleanliness _ s = return "?"
+   vcsCleanliness _ ("No changes!") = Just "#"
+   vcsCleanliness _ s = let body = map head $ DL.lines s in
+      if ((filter (/='a') body)=="") then Just "?" else Just "*"
+   -- darcs is so hard to find ahead/behind
+   vcsAhead _ s = do
+      return ""
+   vcsBehind _ s = do
+      return ""
    vcsCurrentBranch _ s =
       -- darcs has no the concept of branch
       return ""
@@ -95,7 +100,7 @@ instance VCS Darcs where
    branchCmd Darcs = "darcs"
    branchArgs Darcs = ["whatsnew"]
    statusCmd Darcs = "darcs"
-   statusArgs Darcs = ["whatsnew"]
+   statusArgs Darcs = ["whatsnew","-l"]
    --
    installed _ = do
       ext <- findExecutable "darcs"

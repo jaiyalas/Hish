@@ -67,10 +67,10 @@ printVCSInfo vcs = do
       _ -> putStr ""
    case _ah of
       Nothing -> return ()
-      Just ah -> putStr $ applyANSI ("+"++ah) $ fgRedL <> mempty
+      Just ah -> putStr $ applyANSI (if ah=="" then "" else "+"++ah) $ fgRedL <> mempty
    case _bh of
       Nothing -> return ()
-      Just bh -> putStr $ applyANSI ("-"++bh) $ fgGreenL <> mempty
+      Just bh -> putStr $ applyANSI (if bh=="" then "" else "-"++bh) $ fgGreenL <> mempty
    putStr "]"
 --
 safePrintVCS :: (Show a, VCS.VCS a) => a -> IO ()

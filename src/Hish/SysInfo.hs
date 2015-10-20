@@ -12,6 +12,7 @@ module Hish.SysInfo
   -- ** version control system
   , status
   , branch
+  , isRepo
   -- * Primitive functions
   , simpleCmd
   , argedCmd
@@ -19,13 +20,12 @@ module Hish.SysInfo
 
 import qualified System.Process as SP
 import System.Exit (ExitCode (..))
-import Data.List (lines,unlines)
-import Data.Char (isSpace)
-import qualified Data.String.Utils as S (split,replace,join)
-
+import Data.List (lines)
+import qualified Data.String.Utils as S (split,replace)
+--
 import qualified Data.Time.LocalTime as LT (getZonedTime)
 import Data.Time.Format as TF (formatTime, defaultTimeLocale)
-
+--
 import Hish.VCS
 
 -- | return username
@@ -35,6 +35,8 @@ uid = simpleCmd (Just . init) "whoami"
 -- | return hostname
 hostname :: IO (Maybe String)
 hostname = argedCmd (Just . init) "hostname" ["-s"]
+
+{- ========================================== -}
 
 -- | return current working directory
 pwd :: Int -- ^ threshold of shortening
@@ -53,6 +55,21 @@ pwd width = do
       ) $ out
     otherwise -> return Nothing
 
+-- | concating the given list of name into a path.
+-- Notice that, this function will __NOT__ add root, __/__, or home, __~__,
+-- to the leftmost position. For example,
+--
+-- >>> pwdShorten ["A","B","C"]
+-- "A/B/C"
+--
+shortDir :: [String] -- ^ a list of folder name
+           -> String
+shortDir [] = ""
+shortDir [l] = l
+shortDir (x:xs) = (head x) : '/' : shortDir xs
+
+{- ========================================== -}
+
 -- | return time or date for given format
 --
 -- >>> time "%H:%M"
@@ -70,19 +87,7 @@ time format = do
 date :: String -> IO String
 date = time
 
-
--- | concating the given list of name into a path.
--- Notice that, this function will __NOT__ add root, __/__, or home, __~__,
--- to the leftmost position. For example,
---
--- >>> pwdShorten ["A","B","C"]
--- "A/B/C"
---
-shortDir :: [String] -- ^ a list of folder name
-           -> String
-shortDir [] = ""
-shortDir [l] = l
-shortDir (x:xs) = (head x) : '/' : shortDir xs
+{- ========================================== -}
 
 -- | get current status.
 status :: VCS a => a        -- ^ version control system
@@ -90,7 +95,7 @@ status :: VCS a => a        -- ^ version control system
               Maybe String,
               Maybe String) -- ^ (cleanliness, ahead, behind)
 status vcs = do
-   maybeText <- argedCmd (Just . id) "git" ["status","--porcelain","-sb"]
+   maybeText <- argedCmd (Just . id) (statusCmd vcs) (statusArgs vcs)
    case maybeText of
       Nothing -> return
          ( Nothing
@@ -104,7 +109,17 @@ status vcs = do
 -- | get current name of git-branch
 branch :: VCS a => a -- ^ version control system
        -> IO (Maybe String)  -- ^ current branch name
-branch vcs =  argedCmd (vcsCurrentBranch vcs) "git" ["branch"]
+branch vcs =  argedCmd (vcsCurrentBranch vcs) (branchCmd vcs) (branchArgs vcs)
+
+-- | using status to verifying the existence of repository
+isRepo :: VCS a => a -> IO Bool
+isRepo vcs = do
+   (code,_,_) <- exeCmd (statusCmd vcs) (statusArgs vcs) ""
+   case code of
+      ExitFailure _ -> return False
+      ExitSuccess   -> return True
+
+{- ========================================== -}
 
 exeCmd :: String
        -> [String]

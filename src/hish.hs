@@ -5,8 +5,6 @@ import qualified Hish.SysInfo as HS
 import qualified Hish.VCS as VCS
 -- for manipulating ANSI code
 import Data.Monoid (mempty,(<>))
--- for checking the existence of vcs
-import System.Directory (doesDirectoryExist)
 
 {- +++++++++++++++++++++++++++++++
 -- Is this helpful?
@@ -24,10 +22,10 @@ main = do
    printUserInfo
    printWorkingTree
    putStr " "
-   existGit <- doesDirectoryExist ".git"
-   if existGit   then printVCSInfo VCS.Git   else return ()
-   existDarcs <- doesDirectoryExist "_darcs"
-   if existDarcs then printVCSInfo VCS.Darcs else return ()
+   --
+   safePrintVCS VCS.Git
+   safePrintVCS VCS.Darcs
+   --
    putStr $ applyANSI (_prompt_symbol++" ") $ mempty
 
 --
@@ -74,3 +72,12 @@ printVCSInfo vcs = do
       Nothing -> return ()
       Just bh -> putStr $ applyANSI ("-"++bh) $ fgGreenL <> mempty
    putStr "]"
+--
+safePrintVCS :: (Show a, VCS.VCS a) => a -> IO ()
+safePrintVCS vcs = do
+   b1 <- VCS.installed vcs
+   case b1 of
+      True -> do
+         b2 <- HS.isRepo vcs
+         if b2 then printVCSInfo vcs else return ()
+      False -> return ()

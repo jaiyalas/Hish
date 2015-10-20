@@ -11,7 +11,7 @@ module Hish.VCS
 import Text.Regex.TDFA ((=~))
 import qualified Data.String.Utils as S (replace)
 import qualified Data.List as DL (lines)
-
+import System.Directory (findExecutable)
 
 -- | Every version control system provides functions as follows
 --
@@ -27,6 +27,16 @@ class VCS a where
    --       * __*__ - /dirty/
    vcsCleanliness :: a -> String -> Maybe String
    vcsCurrentBranch :: a -> String -> Maybe String
+   -- | get command for revealing branch
+   branchCmd :: a -> String
+   -- | get arguments for revealing branch
+   branchArgs :: a -> [String]
+   -- | get command for revealing status
+   statusCmd :: a -> String
+   -- | get arguments for revealing status
+   statusArgs :: a -> [String]
+   -- | is this vcs installed (= executable)
+   installed :: a -> IO Bool
 
 -- | Unit type for presenting Git.
 data Git = Git
@@ -55,6 +65,17 @@ instance VCS Git where
       . head
       . filter ((=='*').head)
       . lines
+   --
+   branchCmd  _ = "git"
+   branchArgs _ = ["branch"]
+   statusCmd  _ = "git"
+   statusArgs _ = ["status","--porcelain","-sb"]
+   --
+   installed _ = do
+      ext <- findExecutable "git"
+      case ext of
+         Nothing -> return False
+         Just _  -> return True
 
 -- | Unit type for presenting Darcs.
 -- /UN-IMPLEMENTED/!
@@ -67,4 +88,17 @@ instance VCS Darcs where
    vcsAhead _ s = return "a"
    vcsBehind _ s = return "b"
    vcsCleanliness _ s = return "?"
-   vcsCurrentBranch _ s = return "QQ"
+   vcsCurrentBranch _ s =
+      -- darcs has no the concept of branch
+      return ""
+   --
+   branchCmd Darcs = "darcs"
+   branchArgs Darcs = ["whatsnew"]
+   statusCmd Darcs = "darcs"
+   statusArgs Darcs = ["whatsnew"]
+   --
+   installed _ = do
+      ext <- findExecutable "darcs"
+      case ext of
+         Nothing -> return False
+         Just _  -> return True

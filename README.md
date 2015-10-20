@@ -10,6 +10,7 @@ Generating a beautiful and useful prompt.
 
 ### Done
 
++ [X] show **local time**
 + [X] show **user name**
 + [X] show **host name**
 + [X] show **working directory**
@@ -23,11 +24,11 @@ Generating a beautiful and useful prompt.
   + *+n* - branch is *ahead* by n
   + *-n* - branch is *behind* by n
 + [X] Basic ANSI color
++ [X] support *darcs* (but not implement correctly)
 
 ### Todo
 
-+ [ ] support *darcs*
-+ [ ] show *time*
++ [ ] complete darcs supporting
 + [ ] implement *color theme*
 + [ ] show *SSH* info
 + [ ] use *config file*

@@ -31,6 +31,9 @@ class VCS a where
 -- | Unit type for presenting Git.
 data Git = Git
 
+instance Show Git where
+   show Git = "G"
+
 instance VCS Git where
    vcsAhead _ s =
       case (s =~ "ahead [0-9]+"  :: String) of
@@ -56,6 +59,9 @@ instance VCS Git where
 -- | Unit type for presenting Darcs.
 -- /UN-IMPLEMENTED/!
 data Darcs = Darcs
+
+instance Show Darcs where
+   show Darcs = "D"
 
 instance VCS Darcs where
    vcsAhead _ s = return "a"

@@ -21,9 +21,11 @@ Generating a beautiful and useful prompt.
    + darcs (darcs has no branch; tracking status is not supported)
 + [X] show **branch name (git only)**
 + [X] show **index/tree status (git and darcs)**
-  + *\** - dirty
-  + *?* - clean *but still having untracked files*
-  + *#* - clean
+  + *\ * - clean
+  + *?* - clean  *but still having untracked files*
+  + *#** - dirty non-empty index
+  + *\** - dirty with empty index
+
 + [X] show **tracking status (git only)**
   + *+n* - branch is *ahead* by n
   + *-n* - branch is *behind* by n

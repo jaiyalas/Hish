@@ -33,12 +33,12 @@ printUserInfo :: IO ()
 printUserInfo = do
    _ts <- HS.time "%H:%M"
    putStr $ applyANSI (_ts) $ fgBlackL <> mempty
-   putStr $ applyANSI "(" $ fgBlackL <> mempty
-   _un <- HS.uid
-   case _un of
-      Nothing -> return ()
-      Just un -> putStr $ applyANSI (un) $ mempty
-   putStr $ applyANSI ")" $ fgBlackL <> mempty
+   -- putStr $ applyANSI "(" $ fgBlackL <> mempty
+   -- _un <- HS.uid
+   -- case _un of
+   --    Nothing -> return ()
+   --    Just un -> putStr $ applyANSI (un) $ mempty
+   -- putStr $ applyANSI ")" $ fgBlackL <> mempty
    -- _hn <- HS.hostname
    -- case _hn of
    --    Nothing -> return ()
@@ -55,22 +55,24 @@ printVCSInfo :: (Show a, VCS.VCS a) => a -> IO ()
 printVCSInfo vcs = do
    _br <- HS.branch vcs
    (_st, _ah, _bh) <- HS.status vcs
-   putStr $ show vcs
+   --putStr $ show vcs
    putStr "["
    case _br of
       Just br -> putStr $ applyANSI br $ fgWhiteL <> ESC_Bold <> mempty
       Nothing -> return ()
    case _st of
-      Just "*" -> putStr $ applyANSI "*" $ ESC_Bold <> fgRed <> mempty
-      Just "?" -> putStr $ applyANSI "?" $ ESC_Bold <> fgYellow <> mempty
-      Just "#" -> putStr $ applyANSI "#" $ ESC_Bold <> fgGreen <> mempty
+      Just "*" -> putStr $ applyANSI "*" $ ESC_Bold <> fgYellowL <> mempty
+      Just "?" -> putStr $ applyANSI "?" $ ESC_Bold <> fgMagentaL <> mempty
+      Just "#" -> putStr $ applyANSI "#" $ ESC_Bold <> fgBlueL <> mempty
       _ -> putStr ""
    case _ah of
       Nothing -> return ()
-      Just ah -> putStr $ applyANSI (if ah=="" then "" else "+"++ah) $ fgRedL <> mempty
+      Just ah -> putStr $ applyANSI (if ah=="" then "" else "+"++ah) $
+         fgRedL <> mempty
    case _bh of
       Nothing -> return ()
-      Just bh -> putStr $ applyANSI (if bh=="" then "" else "-"++bh) $ fgGreenL <> mempty
+      Just bh -> putStr $ applyANSI (if bh=="" then "" else "-"++bh) $
+         fgGreenL <> mempty
    putStr "]"
 --
 safePrintVCS :: (Show a, VCS.VCS a) => a -> IO ()

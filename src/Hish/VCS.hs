@@ -22,9 +22,10 @@ class VCS a where
    vcsBehind :: a -> String -> Maybe String
    -- | determining the cleanliness of working-tree
    --
-   --       * __#__ - /clean/ working directory
-   --       * __?__ - /clean/ but existing untracked file
-   --       * __*__ - /dirty/
+   --       * __' '__ - /clean/
+   --       * __'?'__ - /clean/ (exists untracked file)
+   --       * __'#'__ - /dirty/ (non-empty index; ready for commit..)
+   --       * __'*'__ - /dirty/ (empty index)
    vcsCleanliness :: a -> String -> Maybe String
    vcsCurrentBranch :: a -> String -> Maybe String
    -- | get command for revealing branch
@@ -55,11 +56,19 @@ instance VCS Git where
          behind -> Just $ S.replace "behind " "" behind
    vcsCleanliness _ s = let body = tail $ DL.lines s in
       case body of
-         [] -> Just "#"
-         _  -> let (index,tree) = unzip $ map ((\ (a:b:_)->(a,b)).take 2) body in
-            if ("" == (filter (/='?') tree))
+         [] -> Just ""
+         _  -> let (index,tree) = unzip $ map ((\ (a:b:_)->(a,b)).take 2) body in case (filter (/=' ') index, filter (/=' ')tree) of
+            -- index == tree == "   "
+            ("","") -> Just ""
+            -- every changes are in index
+            (_,"") -> Just "#"
+            -- none change is inindex
+            ("",_) -> Just "*"
+            (idx,tre) -> if ("" == (filter (/='?') (idx++tre)))
+               -- left only untracked file
                then Just "?"
-               else Just "*"
+               -- mix situiation
+               else Just "#"
    vcsCurrentBranch _ = Just
       . drop 2
       . head

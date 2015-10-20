@@ -3,10 +3,19 @@ module Main where
 import Hish.ANSICode
 import qualified Hish.SysInfo as HS
 import qualified Hish.VCS as VCS
-
+-- for manipulating ANSI code
 import Data.Monoid (mempty,(<>))
+-- for checking the existence of vcs
+import System.Directory (doesDirectoryExist)
 
---
+{- +++++++++++++++++++++++++++++++
+-- Is this helpful?
+import System.Environment (getEnv    -- String -> IO String
+                          ,setEnv    -- String -> String -> IO ()
+                          ,lookupEnv -- String -> IO (Maybe String)
+                          )
++++++++++++++++++++++++++++++++ -}
+
 _prompt_symbol = ">"
 _pwdWidth = 60
 

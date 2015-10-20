@@ -2,12 +2,16 @@
 
 module Hish.SysInfo
   (
-  -- * Get basic information
+  -- * Basic information
+  -- ** name
     uid
   , hostname
+  -- ** working directory
   , pwd
-  , shortDir
-  -- * Get VCS-related information
+  -- ** time and date
+  , time
+  , date
+  -- ** version control system
   , status
   , branch
   -- * Primitive functions
@@ -20,6 +24,9 @@ import System.Exit (ExitCode (..))
 import Data.List (lines,unlines)
 import Data.Char (isSpace)
 import qualified Data.String.Utils as S (split,replace,join)
+
+import qualified Data.Time.LocalTime as LT (getZonedTime)
+import Data.Time.Format as TF (formatTime, defaultTimeLocale)
 
 import Hish.VCS
 
@@ -47,6 +54,24 @@ pwd width = do
       . filter (/='\n')
       ) $ out
     otherwise -> return Nothing
+
+-- | return time or date for given format
+--
+-- >>> time "%H:%M"
+-- 13:15
+--
+-- >>> time "%Y-%b-%d"
+-- 2015-Oct-20
+time :: String -- ^ format (read "Data.Time.Format" for more detail)
+     -> IO String
+time format = do
+   ztime <- LT.getZonedTime
+   return $ TF.formatTime TF.defaultTimeLocale format ztime
+
+-- | just an alias of 'time'
+date :: String -> IO String
+date = time
+
 
 -- | concating the given list of name into a path.
 -- Notice that, this function will __NOT__ add root, __/__, or home, __~__,

@@ -20,6 +20,7 @@ _pwdWidth = 60
 main :: IO ()
 main = do
    printUserInfo
+   putStr " "
    printWorkingTree
    putStr " "
    --
@@ -56,7 +57,7 @@ printVCSInfo vcs = do
    _br <- HS.branch vcs
    (_st, _ah, _bh) <- HS.status vcs
    --putStr $ show vcs
-   putStr "["
+   -- putStr "["
    case _br of
       Just br -> putStr $ applyANSI br $ fgWhiteL <> ESC_Bold <> mempty
       Nothing -> return ()
@@ -73,7 +74,7 @@ printVCSInfo vcs = do
       Nothing -> return ()
       Just bh -> putStr $ applyANSI (if bh=="" then "" else "-"++bh) $
          fgGreenL <> mempty
-   putStr "]"
+   -- putStr "]"
 --
 safePrintVCS :: (Show a, VCS.VCS a) => a -> IO ()
 safePrintVCS vcs = do

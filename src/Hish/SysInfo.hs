@@ -46,7 +46,10 @@ pwd width = do
   mName <- uid
   case (code, mName) of
     (ExitSuccess, Just name)   -> return $ return $
-      ( (\str -> if (head str) == '~' then str else '/':str )
+      ( (\str -> case head str of
+          '~' -> str
+          '/' -> str
+          _ -> '/':str )
       . (\str -> if (length str) > width
                     then shortDir $ S.split "/" str
                     else str)
@@ -66,6 +69,8 @@ shortDir :: [String] -- ^ a list of folder name
            -> String
 shortDir [] = ""
 shortDir [l] = l
+shortDir ("":xs) = shortDir xs
+shortDir (('.':s):xs) = '.' : (head s) : '/' : shortDir xs
 shortDir (x:xs) = (head x) : '/' : shortDir xs
 
 {- ========================================== -}

@@ -34,3 +34,7 @@
 * [m] re-design status symbol
 * [m] reset prompt format and color
 * [-] turn-off the supporting of darcs
+
+## 0.1.2.2  -- 2015-10-22
+
+* [m] bug fixed

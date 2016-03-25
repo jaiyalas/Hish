@@ -7,11 +7,13 @@ import qualified Hish.VCS as VCS
 import Data.Monoid (mempty,(<>))
 
 _prompt_symbol = ">"
-_pwdWidth = 60
+_pwdWidth = 45
 
 main :: IO ()
 main = do
-   printUserInfo
+   printSTime
+   -- printUID
+   -- printHostname
    putStr " "
    printWorkingTree
    putStr " "
@@ -21,28 +23,6 @@ main = do
    --
    putStr $ applyANSI (_prompt_symbol++" ") $ mempty
 
---
-printUserInfo :: IO ()
-printUserInfo = do
-   _ts <- HS.time "%H:%M"
-   putStr $ applyANSI (_ts) $ fgBlackL <> mempty
-   -- putStr $ applyANSI "(" $ fgBlackL <> mempty
-   -- _un <- HS.uid
-   -- case _un of
-   --    Nothing -> return ()
-   --    Just un -> putStr $ applyANSI (un) $ mempty
-   -- putStr $ applyANSI ")" $ fgBlackL <> mempty
-   -- _hn <- HS.hostname
-   -- case _hn of
-   --    Nothing -> return ()
-   --    Just hn -> putStr $ applyANSI ("@"++hn) $ fgBlackL <> mempty
---
-printWorkingTree :: IO ()
-printWorkingTree = do
-   _wd <- HS.pwd _pwdWidth
-   case _wd of
-      Nothing -> return ()
-      Just wd -> putStr $ applyANSI wd $ fgGreen <> mempty
 --
 printVCSInfo :: (Show a, VCS.VCS a) => a -> IO ()
 printVCSInfo vcs = do
@@ -76,3 +56,33 @@ safePrintVCS vcs = do
          b2 <- HS.isRepo vcs
          if b2 then printVCSInfo vcs else return ()
       False -> return ()
+--
+printSTime :: IO ()
+printSTime = do
+   _ts <- HS.time "%H:%M"
+   putStr $ applyANSI (_ts) $ fgBlackL <> mempty
+
+--
+printUID :: IO ()
+printUID = do
+   _un <- HS.uid
+   case _un of
+      Nothing -> return ()
+      Just un -> do
+           putStr $ applyANSI "(" $ fgBlackL <> mempty
+           putStr $ applyANSI (un) $ mempty
+           putStr $ applyANSI ")" $ fgBlackL <> mempty
+--
+printHostname :: IO ()
+printHostname = do
+   _hn <- HS.hostname
+   case _hn of
+      Nothing -> return ()
+      Just hn -> putStr $ applyANSI ("@"++hn) $ fgBlackL <> mempty
+--
+printWorkingTree :: IO ()
+printWorkingTree = do
+   _wd <- HS.pwd _pwdWidth
+   case _wd of
+      Nothing -> return ()
+      Just wd -> putStr $ applyANSI wd $ fgGreen <> mempty

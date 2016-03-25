@@ -21,6 +21,7 @@ module Hish.SysInfo
 import qualified System.Process as SP
 import System.Exit (ExitCode (..))
 import Data.List (lines)
+import Text.Regex.TDFA ((=~))
 import qualified Data.String.Utils as S (split,replace)
 --
 import qualified Data.Time.LocalTime as LT (getZonedTime)
@@ -46,13 +47,9 @@ pwd width = do
   mName <- uid
   case (code, mName) of
     (ExitSuccess, Just name)   -> return $ return $
-      ( (\str -> case head str of
-          '~' -> str
-          '/' -> str
-          _ -> '/':str )
-      . (\str -> if (length str) > width
-                    then shortDir $ S.split "/" str
-                    else str)
+      ( (\str -> if (length str) > width
+            then shortenDir "" $ S.split "/" str
+            else str)
       . S.replace ("/Users/"++name) "~"
       . filter (/='\n')
       ) $ out
@@ -65,13 +62,16 @@ pwd width = do
 -- >>> pwdShorten ["A","B","C"]
 -- "A/B/C"
 --
-shortDir :: [String] -- ^ a list of folder name
+shortenDir :: String   -- ^ acc parameter
+           -> [String] -- ^ a list of folder name
            -> String
-shortDir [] = ""
-shortDir [l] = l
-shortDir ("":xs) = shortDir xs
-shortDir (('.':s):xs) = '.' : (head s) : '/' : shortDir xs
-shortDir (x:xs) = (head x) : '/' : shortDir xs
+shortenDir rs []      = "/"
+shortenDir rs [l]     = rs ++ ('/' : l)
+shortenDir rs ("":xs) = shortenDir rs xs
+shortenDir rs (x:xs)  =
+    if (x =~ "\\`[A-Za-z0-9]" :: Bool)
+        then shortenDir (rs ++ '/' : take 1 x) xs
+        else shortenDir (rs ++ '/' : take 2 x) xs
 
 {- ========================================== -}
 

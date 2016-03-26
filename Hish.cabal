@@ -1,5 +1,5 @@
 Name:                   Hish
-Version:                0.1.2.2
+Version:                0.1.2.3
 Author:                 Yun-Yan Chi
 Maintainer:             jaiyalas@gmail.com
 License:                BSD3
@@ -45,5 +45,5 @@ executable hish
                , directory   >= 1.2.2 && < 1.3
 --
 Source-Repository head
-  Type:                 git
-  location:             https://github.com/jaiyalas/Hish.git
+  Type:     git
+  location: https://github.com/jaiyalas/Hish.git

@@ -1,14 +1,18 @@
+{-# LANGUAGE BangPatterns #-}
 module Main where
-
+--
 import Hish.ANSICode
-import qualified Hish.SysInfo as HS
-import qualified Hish.VCS as VCS
--- for manipulating ANSI code
+import Hish.VCS
+import Hish.VCS.Git
+-- import Hish.VCS.Darcs
+import qualified Hish.SysInfo   as SysInfo
+import qualified System.Process as SP
+--
 import Data.Monoid (mempty,(<>))
-
+--
 _prompt_symbol = ">"
 _pwdWidth = 45
-
+--
 main :: IO ()
 main = do
    printSTime
@@ -18,54 +22,43 @@ main = do
    printWorkingTree
    putStr " "
    --
-   safePrintVCS VCS.Git
-   -- safePrintVCS VCS.Darcs
+   !b1 <- installed Git
+   !b2 <- isRepo Git
+   if (b1 && b2) then printVCSInfo Git else return ()
    --
    putStr $ applyANSI (_prompt_symbol++" ") $ mempty
-
 --
-printVCSInfo :: (Show a, VCS.VCS a) => a -> IO ()
+--
+printVCSInfo :: (Show a, VCS a) => a -> IO ()
 printVCSInfo vcs = do
-   _br <- HS.branch vcs
-   (_st, _ah, _bh) <- HS.status vcs
-   --putStr $ show vcs
-   -- putStr "["
-   case _br of
-      Just br -> putStr $ applyANSI br $ fgWhiteL <> ESC_Bold <> mempty
-      Nothing -> return ()
-   case _st of
+    _br <- getBranch vcs
+    case _br of
+      Just br  -> putStr $ applyANSI br $ ESC_Bold <> fgWhiteL <> mempty
+      Nothing  -> return ()
+    (_st, _ah, _bh) <- getStatus vcs
+    case _st of
       Just "*" -> putStr $ applyANSI "*" $ ESC_Bold <> fgYellowL <> mempty
       Just "?" -> putStr $ applyANSI "?" $ ESC_Bold <> fgMagentaL <> mempty
       Just "#" -> putStr $ applyANSI "#" $ ESC_Bold <> fgBlueL <> mempty
       _ -> putStr ""
-   case _ah of
+    case _ah of
       Nothing -> return ()
       Just ah -> putStr $ applyANSI (if ah=="" then "" else "+"++ah) $
          fgRedL <> mempty
-   case _bh of
+    case _bh of
       Nothing -> return ()
       Just bh -> putStr $ applyANSI (if bh=="" then "" else "-"++bh) $
          fgGreenL <> mempty
-   -- putStr "]"
---
-safePrintVCS :: (Show a, VCS.VCS a) => a -> IO ()
-safePrintVCS vcs = do
-   b1 <- VCS.installed vcs
-   case b1 of
-      True -> do
-         b2 <- HS.isRepo vcs
-         if b2 then printVCSInfo vcs else return ()
-      False -> return ()
 --
 printSTime :: IO ()
 printSTime = do
-   _ts <- HS.time "%H:%M"
+   _ts <- SysInfo.time "%H:%M"
    putStr $ applyANSI (_ts) $ fgBlackL <> mempty
 
 --
 printUID :: IO ()
 printUID = do
-   _un <- HS.uid
+   _un <- SysInfo.uid
    case _un of
       Nothing -> return ()
       Just un -> do
@@ -75,14 +68,14 @@ printUID = do
 --
 printHostname :: IO ()
 printHostname = do
-   _hn <- HS.hostname
+   _hn <- SysInfo.hostname
    case _hn of
       Nothing -> return ()
       Just hn -> putStr $ applyANSI ("@"++hn) $ fgBlackL <> mempty
 --
 printWorkingTree :: IO ()
 printWorkingTree = do
-   _wd <- HS.pwd _pwdWidth
+   _wd <- SysInfo.pwd _pwdWidth
    case _wd of
       Nothing -> return ()
       Just wd -> putStr $ applyANSI wd $ fgGreen <> mempty

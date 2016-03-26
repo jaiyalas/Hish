@@ -15,7 +15,7 @@ _pwdWidth = 45
 --
 main :: IO ()
 main = do
-   printSTime
+   -- printSTime
    -- printUID
    -- printHostname
    putStr " "

@@ -38,3 +38,10 @@
 ## 0.1.2.2  -- 2015-10-22
 
 * [m] bug fixed
+
+## 0.1.2.3  -- 2016-03-26
+
+* [m] bug fixed
+* [m] change the verifying method for git-status
+* [+] new framework for VCS
+* [+] separated dracs-related functions 

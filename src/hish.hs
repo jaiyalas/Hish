@@ -7,6 +7,7 @@ import Hish.VCS.Git
 -- import Hish.VCS.Darcs
 import qualified Hish.SysInfo   as SysInfo
 import qualified System.Process as SP
+-- import System.Directory (getHomeDirectory,doesFileExist)
 --
 import Data.Monoid (mempty,(<>))
 --
@@ -15,18 +16,18 @@ _pwdWidth = 45
 --
 main :: IO ()
 main = do
-   -- printSTime
-   -- printUID
-   -- printHostname
-   putStr " "
-   printWorkingTree
-   putStr " "
-   --
-   !b1 <- installed Git
-   !b2 <- isRepo Git
-   if (b1 && b2) then printVCSInfo Git else return ()
-   --
-   putStr $ applyANSI (_prompt_symbol++" ") $ mempty
+    printSTime
+    -- printUID
+    -- printHostname
+    putStr " "
+    printWorkingTree
+    putStr " "
+    --
+    !b1 <- installed Git
+    !b2 <- isRepo Git
+    if (b1 && b2) then printVCSInfo Git else return ()
+    --
+    putStr $ applyANSI (_prompt_symbol++" ") $ mempty
 --
 --
 printVCSInfo :: (Show a, VCS a) => a -> IO ()

@@ -1,26 +1,22 @@
-module Main where
-
+{-# LANGUAGE BangPatterns #-}
+module Hish
+    ( -- * printing
+      printUserInfo
+    , printWorkingTree
+    , printVCSInfo
+    , safePrintVCS
+    -- * modules
+    , module Hish.ANSICode
+    , module HS
+    , module VCS
+    ) where
+--
 import Hish.ANSICode
-import qualified Hish.SysInfo as HS
-import qualified Hish.VCS as VCS
+import Hish.SysInfo as HS
+import Hish.VCS as VCS
 -- for manipulating ANSI code
 import Data.Monoid (mempty,(<>))
-
-_prompt_symbol = ">"
-_pwdWidth = 60
-
-main :: IO ()
-main = do
-   printUserInfo
-   putStr " "
-   printWorkingTree
-   putStr " "
-   --
-   safePrintVCS VCS.Git
-   -- safePrintVCS VCS.Darcs
-   --
-   putStr $ applyANSI (_prompt_symbol++" ") $ mempty
-
+import Debug.Trace
 --
 printUserInfo :: IO ()
 printUserInfo = do
@@ -37,8 +33,8 @@ printUserInfo = do
    --    Nothing -> return ()
    --    Just hn -> putStr $ applyANSI ("@"++hn) $ fgBlackL <> mempty
 --
-printWorkingTree :: IO ()
-printWorkingTree = do
+printWorkingTree :: Int -> IO ()
+printWorkingTree _pwdWidth = do
    _wd <- HS.pwd _pwdWidth
    case _wd of
       Nothing -> return ()
@@ -68,7 +64,7 @@ printVCSInfo vcs = do
          fgGreenL <> mempty
    -- putStr "]"
 --
-safePrintVCS :: (Show a, VCS.VCS a) => a -> IO ()
+safePrintVCS :: (Show a, VCS a) => a -> IO ()
 safePrintVCS vcs = do
    b1 <- VCS.installed vcs
    case b1 of

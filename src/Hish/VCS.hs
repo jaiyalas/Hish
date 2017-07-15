@@ -83,6 +83,21 @@ instance VCS Git where
         case ext of
             Nothing -> return False
             Just _  -> return True
+--
+parse'GitState = do
+    --
+
+    --
+--
+parse'GitState'Headline = do
+    string "##"
+    spaces
+    name <- many1 letter
+    choice
+        [ --
+        , string "..."
+        ]
+parse'GitState'Diffline
 
 -- | Unit type for presenting Darcs.
 -- /UN-IMPLEMENTED/!

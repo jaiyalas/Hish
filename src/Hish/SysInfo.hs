@@ -1,3 +1,4 @@
+{-# LANGUAGE BangPatterns #-}
 module Hish.SysInfo
   (
   -- * Basic information
@@ -27,6 +28,9 @@ import qualified Data.Time.LocalTime as LT (getZonedTime)
 import Data.Time.Format as TF (formatTime, defaultTimeLocale)
 --
 import Hish.VCS
+--
+import Debug.Trace
+--
 
 -- | return username
 uid :: IO (Maybe String)
@@ -96,6 +100,7 @@ status :: VCS a => a        -- ^ version control system
               Maybe String) -- ^ (cleanliness, ahead, behind)
 status vcs = do
    maybeText <- argedCmd (Just . id) (statusCmd vcs) (statusArgs vcs)
+   let !x = traceShowId maybeText
    case maybeText of
       Nothing -> return
          ( Nothing

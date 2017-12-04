@@ -16,3 +16,4 @@ cabal.sandbox.config
 *.aux
 *.hp
 build-docs.*
+.stack-work/

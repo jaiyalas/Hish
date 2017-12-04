@@ -100,7 +100,7 @@ status :: VCS a => a        -- ^ version control system
               Maybe String) -- ^ (cleanliness, ahead, behind)
 status vcs = do
    maybeText <- argedCmd (Just . id) (statusCmd vcs) (statusArgs vcs)
-   let !x = traceShowId maybeText
+   -- let !x = traceShowId maybeText
    case maybeText of
       Nothing -> return
          ( Nothing

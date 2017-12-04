@@ -84,28 +84,34 @@ instance VCS Git where
             Nothing -> return False
             Just _  -> return True
 --
-parse'GitState = do
-    --
 
-    --
+-- -- -- -- --
+
+-- parse'GitState = do
+--     --
 --
-parse'GitState'Headline = do
-    string "##"
-    spaces
-    name <- many1 letter
-    choice
-        [ --
-        , string "..."
-        ]
-parse'GitState'Diffline
+--     --
+-- --
+-- parse'GitState'Headline = do
+--     string "##"
+--     spaces
+--     name <- many1 letter
+--     choice
+--         [ --
+--         , string "..."
+--         ]
+-- --
+-- parse'GitState'Diffline
+
+-- -- -- -- --
 
 -- | Unit type for presenting Darcs.
 -- /UN-IMPLEMENTED/!
 data Darcs = Darcs
-
+--
 instance Show Darcs where
    show Darcs = "D"
-
+--
 -- instance VCS Darcs where
 --    vcsCleanliness _ ("No changes!") = Just "#"
 --    vcsCleanliness _ s = let body = map head $ DL.lines s in

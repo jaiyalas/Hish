@@ -1,4 +1,5 @@
 .DS_Store
+.stack-work/
 dist
 cabal-dev
 *.o
